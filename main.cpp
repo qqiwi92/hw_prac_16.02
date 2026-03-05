@@ -2,25 +2,33 @@
 
 template <class T>
 T *merge(const T *const *a, size_t sa, const size_t *sai, T *c) {
-
+  if (!sa || !a || !sai || !c) {
+    return nullptr;
+  }
   size_t *margins = new size_t[sa]();
-  size_t total = 0;
-  for (size_t i = 0; i < sa; ++i)
-    total += sai[i];
+  try {
 
-  for (size_t i = 0; i < total; ++i) {
-    size_t min_idx = 0;
+    size_t total = 0;
+    for (size_t i = 0; i < sa; ++i)
+      total += sai[i];
 
-    for (size_t j = 0; j < sa; ++j) {
-      if (margins[j] < sai[j]) {
-        if (a[j][margins[j]] < a[min_idx][margins[min_idx]]) {
-          min_idx = j;
+    for (size_t i = 0; i < total; ++i) {
+      size_t min_idx = 0;
+
+      for (size_t j = 0; j < sa; ++j) {
+        if (margins[j] < sai[j]) {
+          if (a[j][margins[j]] < a[min_idx][margins[min_idx]]) {
+            min_idx = j;
+          }
         }
       }
-    }
 
-    c[i] = a[min_idx][margins[min_idx]];
-    margins[min_idx]++;
+      c[i] = a[min_idx][margins[min_idx]];
+      margins[min_idx]++;
+    }
+  } catch (...) {
+    delete[] margins;
+    throw;
   }
 
   delete[] margins;
