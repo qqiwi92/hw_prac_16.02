@@ -5,15 +5,22 @@ T *merge(const T *const *a, size_t sa, const size_t *sai, T *c) {
 
   size_t c_i = 0;
 
+  size_t * margins = new size_t[sa](); 
+  
   for (size_t i = 0; i < sa; ++i) {
     for (size_t j = 0; j < sai[i]; ++j) {
-      T minn = a[0][0];
-      for (size_t fi = 1; i < sa; ++i) {
+      
+      T minn = a[0][margins[0]]; // this will cause some damage
+      
+      for (size_t fi = 1; i < sa; ++fi) {
+        size_t this_margin = margins[fi];
+        if (this_margin >= sai[fi]) continue;
+        T this_el = a[fi][this_margin];
         minn = a[fi][0] < minn ? a[fi][0] : minn; 
       }
-      for (size_t fi = 0; i < sa; ++i) {
+      for (size_t fi = 0; i < sa; ++fi) {
         if (a[fi][0] == minn){
-          a[fi][0] = a[fi][0] + 1;
+          margins[fi]++;
           break;
         }
       }
